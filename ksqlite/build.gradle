@@ -1,0 +1,89 @@
+import org.gradle.internal.os.OperatingSystem
+
+apply plugin: 'kotlin-multiplatform'
+
+group 'com.imohsenb'
+version '0.0.1'
+
+kotlin {
+    def oprSys = OperatingSystem.current()
+    println 'OS:'+oprSys
+
+    targets {
+        final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
+                              ? presets.iosArm64 : presets.iosX64
+
+        fromPreset(iOSTarget, 'ios') {
+            compilations.main.outputKinds('FRAMEWORK')
+            compilations.main.cinterops {
+                sqlite3 {                    
+                    switch(oprSys) {
+                        case OperatingSystem.MAC_OS:
+                            includeDirs.headerFilterOnly '/usr/local/include/'
+                        break;
+                    }
+                }
+            }
+        }
+
+        fromPreset(presets.jvm, 'android')
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation kotlin('stdlib-common')
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation kotlin('test-common')
+                implementation kotlin('test-annotations-common')
+            }
+        }
+        androidMain {
+            dependencies {
+                implementation kotlin('stdlib')
+            }
+        }
+        androidTest {
+            dependencies {
+                implementation kotlin('test')
+                implementation kotlin('test-junit')
+            }
+        }
+        iosMain {
+        }
+        iosTest {
+        }
+    }
+}
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}
+
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    frameworkDir.mkdir()
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+
+    println(frameworkDir)
+
+    inputs.property "mode", mode
+    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+    
+
+    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            println text
+            setExecutable(true)
+        }
+    }
+}
+
+tasks.build.dependsOn packForXCode
