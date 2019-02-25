@@ -1,9 +1,14 @@
 import org.gradle.internal.os.OperatingSystem
 
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'com.android.library'
 
 group 'com.imohsenb'
 version '0.0.1'
+
+android {
+    compileSdkVersion(28)
+}
 
 kotlin {
     def oprSys = OperatingSystem.current()
@@ -20,13 +25,15 @@ kotlin {
                     switch(oprSys) {
                         case OperatingSystem.MAC_OS:
                             includeDirs.headerFilterOnly '/usr/local/include/'
-                        break;
+                        break
                     }
                 }
             }
         }
 
-        fromPreset(presets.jvm, 'android')
+        fromPreset(presets.android, 'android')
+
+
     }
     sourceSets {
         commonMain {
@@ -41,6 +48,7 @@ kotlin {
             }
         }
         androidMain {
+
             dependencies {
                 implementation kotlin('stdlib')
             }
