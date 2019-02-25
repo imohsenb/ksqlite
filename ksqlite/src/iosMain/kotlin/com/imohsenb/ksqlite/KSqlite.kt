@@ -6,20 +6,27 @@ import sqlite3.*
 var db: CValuesRef<sqlite3>? = null
 
 actual fun version(): String {
-    return "ios ${sqlite3_version.rawValue}"
+    return "SQLite iOS v${sqlite3_version.toKString()}"
 }
 
 actual fun openOrCreateDatabase(name: String): Boolean {
 
-    memScoped {
-        lateinit var ppDb : CValuesRef<CPointerVar<cnames.structs.sqlite3>>
-        if(sqlite3_open("file:data.db", ppDb) == SQLITE_OK) {
+        var ppDb : CValuesRef<CPointerVar<sqlite3>>? = null
+        var flags = SQLITE_OPEN_READWRITE or SQLITE_OPEN_CREATE or SQLITE_OPEN_URI
+
+        var status = sqlite3_open_v2(name, ppDb, flags, null) 
+        if(status == SQLITE_OK) {
             ppDb.let {
-                db = it.getPointer(memScope)[0]
+                //db = it.getPointer(memScope)[0]
                 return true
             }
+        } else {
+            println("Error: unable to open database ");
+            //println("`${sqlite3_errmsg(db)?.toKString()}`")
+            println("${name}")
+            println("${flags}")
+            println("$status")
         }
-    }
     return false
 }
 
