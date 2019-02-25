@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 
-@class MainKDatabase, MainKotlinCValuesRef, MainKotlinAutofreeScope, MainKotlinDeferScope, MainKotlinUnit;
+@class MainKotlinCValuesRef, MainKotlinAutofreeScope, MainKotlinDeferScope, MainKotlinUnit;
 
 @protocol MainKotlinNativePlacement;
 
@@ -142,18 +142,13 @@ __attribute__((swift_name("KotlinBoolean")))
 @end;
 
 __attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("KDatabase")))
-@interface MainKDatabase : KotlinBase
-- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
-+ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("SqliteKt")))
-@interface MainSqliteKt : KotlinBase
-+ (void)openCreateDatabaseName:(NSString *)name __attribute__((swift_name("openCreateDatabase(name:)")));
+__attribute__((swift_name("KSqliteKt")))
+@interface MainKSqliteKt : KotlinBase
 + (NSString *)version __attribute__((swift_name("version()")));
-@property (class) MainKotlinCValuesRef *db;
++ (BOOL)openOrCreateDatabaseName:(NSString *)name __attribute__((swift_name("openOrCreateDatabase(name:)")));
++ (void)close __attribute__((swift_name("close()")));
++ (BOOL)execSQLSql:(NSString *)sql __attribute__((swift_name("execSQL(sql:)")));
+@property (class) MainKotlinCValuesRef * _Nullable db;
 @end;
 
 __attribute__((swift_name("KotlinCValuesRef")))

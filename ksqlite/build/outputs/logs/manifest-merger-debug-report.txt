@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml:2:1-4:3
-INJECTED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml:2:1-4:3
-INJECTED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml:2:1-4:3
+ADDED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml:2:1-4:3
+INJECTED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml:2:1-4:3
+INJECTED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml:2:1-4:3
 	package
-		ADDED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml:3:9-39
-		INJECTED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml
-		INJECTED from E:\Mine\ksqlite\ksqlite\ksqlite\src\main\AndroidManifest.xml
+		ADDED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml:3:9-39
+		INJECTED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml
+		INJECTED from /Volumes/Storage/Projects/ksqlite/ksqlite/src/main/AndroidManifest.xml
