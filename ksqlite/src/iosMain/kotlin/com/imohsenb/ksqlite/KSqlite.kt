@@ -10,23 +10,24 @@ actual fun version(): String {
 }
 
 actual fun openOrCreateDatabase(name: String): Boolean {
-
-        var ppDb : CValuesRef<CPointerVar<sqlite3>>? = null
+    memScoped{
+        var ppDb : CPointerVar<sqlite3>  = allocPointerTo<sqlite3>()
         var flags = SQLITE_OPEN_READWRITE or SQLITE_OPEN_CREATE or SQLITE_OPEN_URI
 
-        var status = sqlite3_open_v2(name, ppDb, flags, null) 
+        var status = sqlite3_open_v2(name, ppDb.ptr, flags, null) 
         if(status == SQLITE_OK) {
             ppDb.let {
-                //db = it.getPointer(memScope)[0]
+                db = it.value
                 return true
             }
         } else {
             println("Error: unable to open database ");
-            //println("`${sqlite3_errmsg(db)?.toKString()}`")
+            println("`${sqlite3_errmsg(db)?.toKString()}`")
             println("${name}")
             println("${flags}")
             println("$status")
         }
+    }
     return false
 }
 
