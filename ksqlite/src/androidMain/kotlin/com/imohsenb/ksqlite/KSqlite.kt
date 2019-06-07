@@ -5,12 +5,11 @@ import android.database.sqlite.SQLiteDatabase
 lateinit var db: SQLiteDatabase
 
 actual fun version(): String {
-    return "android : none"
+    return "android"
 }
 
 actual fun openOrCreateDatabase(name: String): Boolean {
-    var path = name
-    db = SQLiteDatabase.openOrCreateDatabase(path, null)
+    db = SQLiteDatabase.openOrCreateDatabase(name, null)
     return db.isOpen
 }
 

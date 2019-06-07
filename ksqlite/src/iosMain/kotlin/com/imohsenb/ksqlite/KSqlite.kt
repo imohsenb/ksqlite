@@ -6,16 +6,17 @@ import sqlite3.*
 var db: CValuesRef<sqlite3>? = null
 
 actual fun version(): String {
-    return "ios ${sqlite3_version.rawValue}"
+    return "ios, ${sqlite3_version.rawValue}"
 }
 
 actual fun openOrCreateDatabase(name: String): Boolean {
 
     memScoped {
-        lateinit var ppDb : CValuesRef<CPointerVar<cnames.structs.sqlite3>>
-        if(sqlite3_open("file:data.db", ppDb) == SQLITE_OK) {
+//        var ppDb : CValuesRef<CPointerVar<cnames.structs.sqlite3>>? = allocPointerTo<sqlite3>()
+        var ppDb : CPointerVar<sqlite3>  = allocPointerTo()
+        if(sqlite3_open("file:$name.db", ppDb.ptr) == SQLITE_OK) {
             ppDb.let {
-                db = it.getPointer(memScope)[0]
+                db = it.value
                 return true
             }
         }
