@@ -2,5 +2,6 @@
 !.gitignore
 local.properties
 
-/build
+
 *.iml
+/**/build
