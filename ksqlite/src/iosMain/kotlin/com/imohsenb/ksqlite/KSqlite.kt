@@ -6,7 +6,7 @@ import sqlite3.*
 var db: CValuesRef<sqlite3>? = null
 
 actual fun version(): String {
-    return "SQLite iOS v${sqlite3_version.toKString()}"
+    return "V2-SQLite iOS v${sqlite3_version.toKString()}"
 }
 
 actual fun openOrCreateDatabase(name: String): Boolean {
@@ -36,11 +36,24 @@ actual fun close() {
 }
 
 actual fun execSQL(sql: String): Boolean {
-    val ppStmt = null
-    val pzTail = null
-    return if (sqlite3_prepare_v2(db, sql, -1, ppStmt, pzTail) == SQLITE_OK) {
-        sqlite3_step(ppStmt) == SQLITE_DONE
-    } else {
-        false
+    memScoped {
+        val ppStmt = allocPointerTo<sqlite3_stmt>()
+        val pzTail = null
+        var result = false
+        if (sqlite3_prepare_v2(db, sql, -1, ppStmt.ptr, pzTail) == SQLITE_OK) {
+            if(sqlite3_step(ppStmt.value) == SQLITE_DONE){
+                result = true
+                println("statement executed successfully")
+            } else {
+                println("statement failed!")
+            }
+        } else {
+            println("statement could not be prepared!")
+        }
+
+        var fres = sqlite3_finalize(ppStmt.value)
+        println("finalize $fres")
+
+        return result
     }
 }
