@@ -9,6 +9,8 @@ expect fun close()
 
 expect fun execSQL(sql: String): Boolean
 
+expect fun execSQL(sql: String, args: MutableCollection<Any?>): Boolean
+
 
 //sqlite3_free()
 //sqlite3_exec
